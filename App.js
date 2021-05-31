@@ -10,9 +10,14 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import cartReducer from './store/reducers/cart';
+import ordersReducer from './store/reducers/orders';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
+  orders: ordersReducer,
 });
 
 //remove composeWithDevTools before deployment
@@ -44,7 +49,6 @@ export default function App() {
       <NavigationContainer>
         <ShopNavigator />
       </NavigationContainer>
-      {/* <ShopNavigator /> */}
     </Provider>
   );
 }

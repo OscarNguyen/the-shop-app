@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 import CartItem from '../../components/shop/CartItem';
 import { removeFromCart } from '../../store/actions/cart';
+import * as orderActions from '../../store/actions/orders';
 
 const CartScreen = props => {
   const cartTotalAmount = useSelector(state => state.cart.totalAmount);
@@ -25,13 +26,21 @@ const CartScreen = props => {
     // return itemArray.sort((a, b) => (a.productId > b.productId ? 1 : -1));
     return itemArray;
   });
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total:<Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          Total:<Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2)*100)/100}</Text>
         </Text>
-        <Button color={Colors.accent} title="Order Now" disabled={cartItems.length === 0} />
+        <Button
+          color={Colors.accent}
+          onPress={() => {
+            dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+          }}
+          title="Order Now"
+          disabled={cartItems.length === 0}
+        />
       </View>
 
       <FlatList
@@ -45,6 +54,7 @@ const CartScreen = props => {
             onRemove={() => {
               dispatch(removeFromCart(itemData.item.productId));
             }}
+            deletable
           />
         )}
       />
